@@ -1,0 +1,12 @@
+C:\Users\jtale\Code\curd\curd.Core\bin\Debug\net9.0\curd.Core.deps.json
+C:\Users\jtale\Code\curd\curd.Core\bin\Debug\net9.0\curd.Core.dll
+C:\Users\jtale\Code\curd\curd.Core\bin\Debug\net9.0\curd.Core.pdb
+C:\Users\jtale\Code\curd\curd.Core\obj\Debug\net9.0\curd.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jtale\Code\curd\curd.Core\obj\Debug\net9.0\curd.Core.AssemblyInfoInputs.cache
+C:\Users\jtale\Code\curd\curd.Core\obj\Debug\net9.0\curd.Core.AssemblyInfo.cs
+C:\Users\jtale\Code\curd\curd.Core\obj\Debug\net9.0\curd.Core.csproj.CoreCompileInputs.cache
+C:\Users\jtale\Code\curd\curd.Core\obj\Debug\net9.0\curd.Core.dll
+C:\Users\jtale\Code\curd\curd.Core\obj\Debug\net9.0\refint\curd.Core.dll
+C:\Users\jtale\Code\curd\curd.Core\obj\Debug\net9.0\curd.Core.pdb
+C:\Users\jtale\Code\curd\curd.Core\obj\Debug\net9.0\ref\curd.Core.dll
+C:\Users\jtale\Code\curd\curd.Core\obj\Debug\net9.0\curd.Core.csproj.AssemblyReference.cache

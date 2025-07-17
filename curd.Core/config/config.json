@@ -1,0 +1,9 @@
+﻿{
+  "active": "chat_gpg",
+  "configs": {
+    "chat_gpg": {
+      "type": "sqlite",
+      "path": "C:\\Users\\jtale\\Code\\chat_gpg\\infrastructure\\db\\dev.db"
+    }
+  }
+}
