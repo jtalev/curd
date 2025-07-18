@@ -10,3 +10,4 @@ C:\Users\jtale\Code\curd\curd.Core\obj\Debug\net9.0\refint\curd.Core.dll
 C:\Users\jtale\Code\curd\curd.Core\obj\Debug\net9.0\curd.Core.pdb
 C:\Users\jtale\Code\curd\curd.Core\obj\Debug\net9.0\ref\curd.Core.dll
 C:\Users\jtale\Code\curd\curd.Core\obj\Debug\net9.0\curd.Core.csproj.AssemblyReference.cache
+C:\Users\jtale\Code\curd\curd.Core\obj\Debug\net9.0\curd.Core.sourcelink.json

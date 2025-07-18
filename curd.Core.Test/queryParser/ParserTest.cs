@@ -63,10 +63,10 @@ namespace curd.Core.Test.queryParser
 
         [Theory]
         [MemberData(nameof(GetTransformData))]
-        public void Transform(string input, IR result)
+        public void Parse(string input, QueryIR result)
         {
             Parser parser = new Parser();
-            IR ir = parser.Parse(input);
+            QueryIR ir = parser.Parse(input);
 
             Assert.Equal(ir.command, result.command);
             Assert.Equal(ir.tableName, result.tableName);
@@ -86,13 +86,13 @@ namespace curd.Core.Test.queryParser
             }
         }
 
-        public static TheoryData<string, IR> GetTransformData()
+        public static TheoryData<string, QueryIR> GetTransformData()
         {
             return new()
             {
                 {
                     "read(\"stores\").where(\"uuid = '123'\"",
-                    new IR
+                    new QueryIR
                     (
                         "read",
                         "stores",
@@ -112,7 +112,7 @@ namespace curd.Core.Test.queryParser
                 },
                 {
                     "create(\"stores\").values(\"uuid = '123'\", \"store = 'Haymes Geelong West'\")",
-                    new IR
+                    new QueryIR
                     (
                         "create",
                         "stores",
@@ -133,7 +133,7 @@ namespace curd.Core.Test.queryParser
                 },
                 {
                     "read(\"stores\").columns(\"uuid\", \"store\").where(\"uuid = '123'\")",
-                    new IR
+                    new QueryIR
                     (
                         "read",
                         "stores",
@@ -154,7 +154,7 @@ namespace curd.Core.Test.queryParser
                 },
                 {
                     "read(\"stores\").columns(\"uuid\", \"store\").where(\"uuid = '123'\").and(\"uuid = '321'\")",
-                    new IR
+                    new QueryIR
                     (
                         "read",
                         "stores",

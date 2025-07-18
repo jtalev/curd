@@ -125,3 +125,4 @@ C:\Users\jtale\Code\curd\curd.Core.Test\obj\Debug\net9.0\refint\curd.Core.Test.d
 C:\Users\jtale\Code\curd\curd.Core.Test\obj\Debug\net9.0\curd.Core.Test.pdb
 C:\Users\jtale\Code\curd\curd.Core.Test\obj\Debug\net9.0\curd.Core.Test.genruntimeconfig.cache
 C:\Users\jtale\Code\curd\curd.Core.Test\obj\Debug\net9.0\ref\curd.Core.Test.dll
+C:\Users\jtale\Code\curd\curd.Core.Test\obj\Debug\net9.0\curd.Core.Test.sourcelink.json

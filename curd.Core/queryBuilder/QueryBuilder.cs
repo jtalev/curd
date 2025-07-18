@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using curd.Core.queryParser;
+using System.Text;
 
 namespace curd.Core.queryBuilder
 {
@@ -10,21 +11,51 @@ namespace curd.Core.queryBuilder
         private const string sqlserver = "SQL Server";
         private const string postgresql = "PostgreSQL";
 
-        private static readonly Dictionary<string, string> quotedTypes = new()
+        // dont need these right now, may decide in the future to not require
+        // users input single quotes for quoted column types and not for
+        // non quoted column types
+
+        //private static readonly Dictionary<string, string> quotedTypes = new()
+        //{
+        //    { "TEXT", sqlite },
+        //    { "DATETIME", sqlite }
+        //};
+
+        //private static readonly Dictionary<string, string> nonQuotedTypes = new()
+        //{
+        //    { "INTEGER", sqlite },
+        //    { "REAL", sqlite },
+        //    { "BLOB", sqlite }
+
+        //};
+
+        public static string BuildQuery(QueryIR queryIR)
         {
-            { "TEXT", sqlite },
-            { "DATETIME", sqlite }
-        };
+            switch (queryIR.command)
+            {
+                case "create":
+                    return BuildCreateQuery(queryIR.tableName, queryIR.values.ToArray());
+                case "read":
+                    return BuildReadQuery(
+                        queryIR.tableName,
+                        queryIR.columnNames.ToArray(),
+                        queryIR.clauses.ToArray());
+                case "update":
+                    return BuildUpdateQuery(
+                        queryIR.tableName,
+                        queryIR.values.ToArray(),
+                        queryIR.clauses.ToArray());
+                case "delete":
+                    return BuildDeleteQuery(
+                        queryIR.tableName,
+                        queryIR.clauses.ToArray());
+                default:
+                    throw new NotSupportedException(
+                        $"command '{queryIR}' not supported");
+            }
+        }
 
-        private static readonly Dictionary<string, string> nonQuotedTypes = new()
-        {
-            { "INTEGER", sqlite },
-            { "REAL", sqlite },
-            { "BLOB", sqlite }
-
-        };
-
-        public static string BuildCreateQuery(string tableName, Value[] values)
+        internal static string BuildCreateQuery(string tableName, Value[] values)
         {
             StringBuilder query = new StringBuilder($"INSERT INTO {tableName} (");
             
@@ -37,7 +68,7 @@ namespace curd.Core.queryBuilder
             return query.Append(");").ToString();
         }
 
-        public static string BuildReadQuery(string tableName, string[]? columnNames, Clause[]? clauses)
+        internal static string BuildReadQuery(string tableName, string[]? columnNames, Clause[]? clauses)
         {
             StringBuilder query = new StringBuilder("SELECT ");
 
@@ -55,20 +86,13 @@ namespace curd.Core.queryBuilder
             return query.Append(';').ToString();
         }
 
-        public static string BuildUpdateQuery(string tableName, Value[] values, Clause[] clauses)
+        internal static string BuildUpdateQuery(string tableName, Value[] values, Clause[] clauses)
         {
             StringBuilder query = new StringBuilder($"UPDATE {tableName} SET ");
 
             for (int i = 0; i < values.Length; i++)
             {
-                if (quotedTypes.ContainsKey(values[i].columnType))
-                {
-                    query.Append($"{values[i].columnName} = '{values[i].value}'");
-                }
-                else
-                {
-                    query.Append($"{values[i].columnName} = {values[i].value}");
-                }
+                query.Append($"{values[i].columnName} = {values[i].value}");
                 if (i < values.Length - 1)
                 {
                     query.Append(", ");
@@ -78,7 +102,7 @@ namespace curd.Core.queryBuilder
             return query.Append($" {JoinClauses(clauses)};").ToString();
         }
     
-        public static string BuildDeleteQuery(string tableName, Clause[]? clauses)
+        internal static string BuildDeleteQuery(string tableName, Clause[]? clauses)
         {
             StringBuilder query = new StringBuilder($"DELETE FROM {tableName}");
             
@@ -110,14 +134,7 @@ namespace curd.Core.queryBuilder
 
             for (int i = 0; i < values.Length; i++)
             {
-                if (quotedTypes.ContainsKey(values[i].columnType))
-                {
-                    query.Append($"'{values[i].value}'");
-                }
-                else
-                {
-                    query.Append($"{values[i].value}");
-                }
+                query.Append($"{values[i].value}");
                 if (i < values.Length - 1)
                 {
                     query.Append(", ");

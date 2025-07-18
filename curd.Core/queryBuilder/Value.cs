@@ -11,13 +11,11 @@
             ];
 
         public string columnName;
-        public string columnType;
         public string value;
 
         public Value(string _columnName, string _value)
         {
             this.columnName = _columnName;
-            this.columnType = "";
             this.value = _value;
         }
     }

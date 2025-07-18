@@ -2,22 +2,24 @@
 
 namespace curd.Core.queryParser
 {
-    public class IR
+    public class QueryIR
     {
-        public string? command;
-        public string? tableName;
+        public string command;
+        public string tableName;
         public List<string> columnNames;
         public List<Value> values;
         public List<Clause> clauses;
 
-        public IR()
+        public QueryIR()
         {
+            command = "";
+            tableName = "";
             columnNames = new List<string>();
             values = new List<Value>();
             clauses = new List<Clause>();
         }
 
-        internal IR(string? command, string? tableName, List<string> columnNames, List<Value> values, List<Clause> clauses)
+        internal QueryIR(string command, string tableName, List<string> columnNames, List<Value> values, List<Clause> clauses)
         {
             this.command = command;
             this.tableName = tableName;
@@ -29,14 +31,14 @@ namespace curd.Core.queryParser
 
     internal class Parser
     {
-        private IR ir;
+        private QueryIR ir;
 
         public Parser()
         {
-            ir = new IR();
+            ir = new QueryIR();
         }
 
-        public IR Parse(string input)
+        public QueryIR Parse(string input)
         {
             return Transform(Tokenize(input));
         }
@@ -58,7 +60,7 @@ namespace curd.Core.queryParser
             }
         }
 
-        internal IR Transform(List<Token> tokens)
+        private QueryIR Transform(List<Token> tokens)
         {
             Token prevKeyToken = new Token("", "");
 
@@ -97,7 +99,7 @@ namespace curd.Core.queryParser
             { "or", "OR" },
         };  
 
-        internal void ParseString(string value, Token prevKeyToken)
+        private void ParseString(string value, Token prevKeyToken)
         {
             switch (prevKeyToken.type)
             {
