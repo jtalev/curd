@@ -6,8 +6,9 @@ namespace curd.Core.database
     {
         public void ConnectDatabase(DbConfig config);
         public void Close();
-        public DataTable ExecuteTableCommand(string query);
-        public DataTable ShowTables();
-        public DataTable ShowTableInfo(string name);
+        public DataTable ExecuteQueryCommand(string query);
+        public int ExecuteNonQueryCommand(string query);
+        public DataTable GetTables();
+        public DataTable GetTableInfo(string name);
     }
 }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("curd.CLI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ce91652dd60dfbb4a44c9f20231d55e691fc6250")]
 [assembly: System.Reflection.AssemblyProductAttribute("curd.CLI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("curd.CLI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

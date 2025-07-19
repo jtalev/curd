@@ -1,38 +1,93 @@
-﻿using curd.Core.database;
+﻿using curd.CLI.display;
+using curd.Core.database;
 using System.Data;
+using Spectre.Console;
+using curd.Core.queryParser;
+using curd.Core.queryBuilder;
 
 namespace curd.CLI
 {
     internal class Repl
     {
-        public IDatabase _database;
+        public IDatabase database;
 
-        public Repl(IDatabase database) 
+        public Repl(IDatabase _database)
         {
-            this._database = database;
+            this.database = _database;
         }
 
         public void Run()
         {
             while (true)
             {
-                Console.Write("> ");
+                AnsiConsole.Write(new Markup("[lightpink4]curd>> [/]"));
                 string? input = Console.ReadLine();
+                while (string.IsNullOrWhiteSpace(input)) 
+                {
+                    Console.WriteLine("Enter a query\n");
+                    AnsiConsole.Write(new Markup("[lightpink4]curd>> [/]"));
+                    input = Console.ReadLine();
+                }
 
-                if (input == "show tables")
+                Parser parser = new Parser();
+                QueryIR queryIR = parser.Parse(input);
+
+                try
                 {
-                    DataTable table = _database.ShowTables();
-                    foreach(DataRow row in table.Rows)
+                    switch (queryIR.command)
                     {
-                        Console.WriteLine($"{row["name"]}");
+                        case "create":
+                            string query = QueryBuilder.BuildQuery(queryIR);
+                            int result = database.ExecuteNonQueryCommand(query);
+                            AnsiConsole.Write(
+                                new Markup(
+                                    $"* [yellow4_1]{result}[/] record created in [yellow4_1]{queryIR.tableName}[/]\n\n"
+                                    )
+                                );
+                            break;
+                        case "read":
+                            query = QueryBuilder.BuildQuery(queryIR);
+                            DataTable dataTable = database.ExecuteQueryCommand(query);
+                            Table table = TableComponent.DisplayQueryResult(dataTable);
+                            AnsiConsole.Write(table);
+                            break;
+                        case "update":
+                            query = QueryBuilder.BuildQuery(queryIR);
+                            result = database.ExecuteNonQueryCommand(query);
+                            AnsiConsole.Write(
+                                new Markup(
+                                    $"* [yellow4_1]{result}[/] record updated in [yellow4_1]{queryIR.tableName}[/]\n\n"
+                                    )
+                                );
+                            break;
+                        case "delete":
+                            query = QueryBuilder.BuildQuery(queryIR);
+                            result = database.ExecuteNonQueryCommand(query);
+                            AnsiConsole.Write(
+                                new Markup(
+                                    $"* [yellow4_1]{result}[/] record deleted from [yellow4_1]{queryIR.tableName}[/]\n\n"
+                                    )
+                                );
+                            break;
+                        case "template":
+                            dataTable = database.GetTableInfo(queryIR.tableName);
+                            if (queryIR.columnNames.Count == 0)
+                            {
+                                foreach (DataRow row in dataTable.Rows)
+                                {
+                                    var columnName = row.ItemArray[0] as string;
+                                    if (columnName != null)
+                                    {
+                                        queryIR.columnNames.Add(columnName);
+                                    }
+                                }
+                            }
+                            AnsiConsole.Write(new Markup($"\n{TemplateDslQuery.BuildTemplateQuery(queryIR)}\n\n"));
+                            break;
                     }
-                } else if (input == "show table info stores")
+                } catch (Exception ex)
                 {
-                    DataTable table = _database.ShowTableInfo("note");
-                    foreach (DataRow row in table.Rows)
-                    {
-                        Console.WriteLine($"{row["name"]} - {row["type"]}");
-                    }
+                    AnsiConsole.WriteLine($"Query not supported: {ex.Message}");
                 }
             }
         }

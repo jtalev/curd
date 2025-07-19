@@ -2,13 +2,13 @@
 {
     public class Value
     {
-        private static readonly string[] supportedColumnTypes = [
-            "TEXT",
-            "DATETIME",
-            "INTEGER",
-            "REAL",
-            "BLOB"
-            ];
+        //private static readonly string[] supportedColumnTypes = [
+        //    "TEXT",
+        //    "DATETIME",
+        //    "INTEGER",
+        //    "REAL",
+        //    "BLOB"
+        //];
 
         public string columnName;
         public string value;

@@ -29,7 +29,7 @@ namespace curd.Core.queryParser
         }   
     }
 
-    internal class Parser
+    public class Parser
     {
         private QueryIR ir;
 

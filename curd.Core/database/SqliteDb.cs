@@ -41,7 +41,7 @@ namespace curd.Core.database
             connection?.Close();
         }
 
-        public DataTable ExecuteTableCommand(string query)
+        public DataTable ExecuteQueryCommand(string query)
         {
             if (connection == null)
             {
@@ -71,16 +71,42 @@ namespace curd.Core.database
             return table;
         }
 
-        public DataTable ShowTables()
+        public int ExecuteNonQueryCommand(string query)
         {
-            var query = "SELECT * FROM sqlite_master WHERE type='table'";
-            return ExecuteTableCommand(query);
+            if (connection == null)
+            {
+                throw new InvalidOperationException(
+                    "Database connection is not initialized");
+            }
+
+            if (connection.State != ConnectionState.Open)
+            {
+                throw new InvalidOperationException(
+                    "Database connection is not open");
+            }
+
+            using var command = connection.CreateCommand();
+            command.CommandText = query;
+
+            try
+            {
+                return command.ExecuteNonQuery();
+            } catch (SqliteException)
+            {
+                throw;
+            }
         }
 
-        public DataTable ShowTableInfo(string name)
+        public DataTable GetTables()
+        {
+            var query = "SELECT * FROM sqlite_master WHERE type='table'";
+            return ExecuteQueryCommand(query);
+        }
+
+        public DataTable GetTableInfo(string name)
         {
             var query = $"SELECT name, type\r\nFROM pragma_table_info('{name}');\r\n";
-            return ExecuteTableCommand(query);
+            return ExecuteQueryCommand(query);
         }
     }
 }
