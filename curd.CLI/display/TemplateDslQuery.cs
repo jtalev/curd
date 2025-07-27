@@ -10,7 +10,7 @@ namespace curd.CLI.display
         {
             StringBuilder output = new StringBuilder(
                 $"COMMAND(\"{queryIR.tableName}\").values(");
-            string values = BuildColumnValueStrings(queryIR);
+            string values = BuildValuesStrings(queryIR);
 
             output.Append($"{values}).where(\"condition\")");
 
@@ -18,7 +18,7 @@ namespace curd.CLI.display
         }
 
         private static string
-            BuildColumnValueStrings(QueryIR queryIR)
+            BuildValuesStrings(QueryIR queryIR)
         {
             StringBuilder values = new StringBuilder();
 
@@ -26,7 +26,7 @@ namespace curd.CLI.display
                 i < queryIR.columnNames.Count;
                 i++)
             {
-                values.Append($"\"[yellow4_1]{queryIR.columnNames[i]}[/] = \"");
+                values.Append($"\"{queryIR.columnNames[i]} = \"");
                 if (i < queryIR.columnNames.Count - 1)
                 {
                     values.Append(", ");

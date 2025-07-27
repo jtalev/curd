@@ -90,7 +90,7 @@ namespace curd.Core.queryParser
             return ir;
         }
 
-        private readonly Dictionary<string, string> keywordConversions = new Dictionary<string, string>
+        private readonly Dictionary<string, string> clauseConversions = new Dictionary<string, string>
         {
             { "where", "WHERE" },
             { "order", "ORDER BY" },
@@ -122,7 +122,7 @@ namespace curd.Core.queryParser
                     break;
                 case TokenType.CLAUSE:
                     ir.clauses.Add(new Clause(
-                            keywordConversions[prevKeyToken.literal],
+                            clauseConversions[prevKeyToken.literal],
                             value
                         ));
                     break;

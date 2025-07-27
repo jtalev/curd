@@ -44,7 +44,8 @@ public class Token
         { "not", TokenType.CLAUSE },
         { "or", TokenType.CLAUSE },
         { "sql", TokenType.SQL },
-        { "template", TokenType.COMMAND }
+        { "template", TokenType.COMMAND },
+        { "test", TokenType.COMMAND }
     };    
 
     public string type;
