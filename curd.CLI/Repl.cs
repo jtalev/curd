@@ -36,6 +36,27 @@ namespace curd.CLI
             }
         }
 
+        private static void WriteCommandOutcomeMessage(int result, string command, string tablename)
+        {
+            AnsiConsole.Write(
+                new Markup(
+                    $"* [yellow4_1]{result}[/] record {command} in [yellow4_1]{tablename}[/]\n\n"
+                    )
+            );
+        }
+
+        private int ExecuteNonQueryCommand(QueryIR queryIR)
+        {
+            string query = QueryBuilder.BuildQuery(queryIR);
+            return database.ExecuteNonQueryCommand(query);
+        }
+
+        private void ProcessNonQueryCommand(QueryIR queryIR)
+        {
+            int result = ExecuteNonQueryCommand(queryIR);
+            WriteCommandOutcomeMessage(result, queryIR.command, queryIR.tableName);
+        }
+
         private void ExecuteCommand(QueryIR queryIR)
         {
             try
@@ -43,37 +64,19 @@ namespace curd.CLI
                 switch (queryIR.command)
                 {
                     case "create":
-                        string query = QueryBuilder.BuildQuery(queryIR);
-                        int result = database.ExecuteNonQueryCommand(query);
-                        AnsiConsole.Write(
-                            new Markup(
-                                $"* [yellow4_1]{result}[/] record created in [yellow4_1]{queryIR.tableName}[/]\n\n"
-                                )
-                            );
+                        ProcessNonQueryCommand(queryIR);
                         break;
                     case "read":
-                        query = QueryBuilder.BuildQuery(queryIR);
+                        string query = QueryBuilder.BuildQuery(queryIR);
                         DataTable dataTable = database.ExecuteQueryCommand(query);
                         Table table = TableComponent.DisplayQueryResult(dataTable);
                         AnsiConsole.Write(table);
                         break;
                     case "update":
-                        query = QueryBuilder.BuildQuery(queryIR);
-                        result = database.ExecuteNonQueryCommand(query);
-                        AnsiConsole.Write(
-                            new Markup(
-                                $"* [yellow4_1]{result}[/] record updated in [yellow4_1]{queryIR.tableName}[/]\n\n"
-                                )
-                            );
+                        ProcessNonQueryCommand(queryIR);
                         break;
                     case "delete":
-                        query = QueryBuilder.BuildQuery(queryIR);
-                        result = database.ExecuteNonQueryCommand(query);
-                        AnsiConsole.Write(
-                            new Markup(
-                                $"* [yellow4_1]{result}[/] record deleted from [yellow4_1]{queryIR.tableName}[/]\n\n"
-                                )
-                            );
+                        ProcessNonQueryCommand(queryIR);
                         break;
                     case "template":
                         dataTable = database.GetTableInfo(queryIR.tableName);
@@ -89,16 +92,16 @@ namespace curd.CLI
                             }
                         }
 
-                        LineEditor eb = new LineEditor();
-                        string input = eb.EditLine(TemplateDslQuery.BuildTemplateQuery(queryIR));
+                        PromptEditor pe = new PromptEditor();
+                        string input = pe.EditPrompt(TemplateDslQuery.BuildTemplateQuery(queryIR));
                         Parser parser = new Parser();
                         ExecuteCommand(parser.Parse(input));
                         
                         break;
                     case "test":
                         // a command to use for testing new features
-                        eb = new LineEditor();
-                        eb.EditLine("COMMAND(\"employee\")");
+                        pe = new PromptEditor();
+                        pe.EditPrompt("COMMAND(\"employee\")");
                         break;
                 }
             }
